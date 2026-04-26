@@ -26,6 +26,13 @@ app.use('/api/categories', require('./routes/categories'));
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
+// Serve built React app in production (Fly.io)
+if (process.env.NODE_ENV === 'production') {
+  const dist = path.join(__dirname, '../frontend-dist');
+  app.use(express.static(dist));
+  app.get('*', (_req, res) => res.sendFile(path.join(dist, 'index.html')));
+}
+
 initializeDb().then(() => {
   app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
 }).catch((err) => {
