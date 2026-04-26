@@ -40,11 +40,7 @@ function toSQLite(sql) {
 if (process.env.DATABASE_URL) {
   // ── PostgreSQL (used on Render) ─────────────────────────────────────────
   const { Pool } = require('pg');
-  const noSsl = process.env.DATABASE_URL.includes('sslmode=disable');
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: noSsl ? false : { rejectUnauthorized: false },
-  });
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   query = (sql, params) => pool.query(sql, params);
 
 } else {
